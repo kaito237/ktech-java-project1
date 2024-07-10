@@ -1,2 +1,2 @@
-public class Todo {
+package PACKAGE_NAME;public class Todo {
 }
