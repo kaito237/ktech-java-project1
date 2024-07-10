@@ -4,22 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class TodoListManager {
-    private List<Todo> todos;
+public class Main {
+    private List<Todo> todoList
+            ;
     private Scanner scanner;
-    private String fileName = "todos.txt";
+    private String fileName = "todoList" ;
     public static void main(String[] args) {
-        TodoListManager todoListManager = new TodoListManager();
+        Main todoListManager = new Main();
         todoListManager.showMenu();
     }
 
-    public TodoListManager() {
-        todos = new ArrayList<>();
+    public Main() {
+        todoList = new ArrayList<>();
         scanner = new Scanner(System.in);
-        loadTodos();
+        create();
     }
 
-    private void loadTodos() {
+    private void create() {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -27,27 +28,27 @@ public class TodoListManager {
                 String title = data[0];
                 LocalDate until = LocalDate.parse(data[1]);
                 boolean done = Boolean.parseBoolean(data[2]);
-                todos.add(new Todo(title, until));
+                todoList.add(new Todo(title, until));
             }
         } catch (IOException | ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
-            // Ignore exceptions for now, new file will be created if it doesn't exist
+            // xu li ngoai le
         }
     }
 
-    private void saveTodos() {
+    private void saveTodo() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            for (Todo todo : todos) {
+            for (Todo todo : todoList) {
                 writer.write(todo.getTitle() + "," + todo.getUntil() + "," + todo.isDone() + "\n");
             }
         } catch (IOException e) {
-            // Ignore exceptions for now
+
         }
     }
 
     public void showMenu() {
         while (true) {
             System.out.println("Welcome!");
-            displayTodos();
+            displayTodo();
             System.out.println("1. Create TODO");
             System.out.println("2. Edit TODO");
             System.out.println("3. Finish TODO");
@@ -72,21 +73,21 @@ public class TodoListManager {
                     deleteTodo();
                     break;
                 case 5:
-                    saveTodos();
-                    System.out.println("Exiting...");
+                    saveTodo();
+                    System.out.println("Exit");
                     return;
                 default:
-                    System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                    System.out.println("Please enter a number between 1 and 5.");
             }
         }
     }
 
-    private void displayTodos() {
-        if (todos.isEmpty()) {
+    private void displayTodo() {
+        if (todoList.isEmpty()) {
             System.out.println("You have no more TODOs left!!!");
         } else {
             int count = 0;
-            for (Todo todo : todos) {
+            for (Todo todo : todoList) {
                 if (!todo.isDone()) {
                     System.out.println((++count) + ". " + todo);
                 }
@@ -107,8 +108,8 @@ public class TodoListManager {
         String untilStr = scanner.nextLine();
         LocalDate until = LocalDate.parse(untilStr);
 
-        todos.add(new Todo(title, until));
-        saveTodos();
+        todoList.add(new Todo(title, until));
+        saveTodo();
         System.out.println("Saved!!!");
     }
 
@@ -117,12 +118,12 @@ public class TodoListManager {
         int index = scanner.nextInt();
         scanner.nextLine(); // Consume newline character
 
-        if (index < 1 || index > todos.size()) {
+        if (index < 1 || index > todoList.size()) {
             System.out.println("Invalid TODO number.");
             return;
         }
 
-        Todo todo = todos.get(index - 1);
+        Todo todo = todoList.get(index - 1);
         System.out.print("Title (" + todo.getTitle() + "): ");
         String title = scanner.nextLine();
 
@@ -138,7 +139,7 @@ public class TodoListManager {
             todo.setUntil(until);
         }
 
-        saveTodos();
+        saveTodo();
         System.out.println("Saved!!!");
     }
 
@@ -147,14 +148,14 @@ public class TodoListManager {
         int index = scanner.nextInt();
         scanner.nextLine(); // Consume newline character
 
-        if (index < 1 || index > todos.size()) {
+        if (index < 1 || index > todoList.size()) {
             System.out.println("Invalid TODO number.");
             return;
         }
 
-        Todo todo = todos.get(index - 1);
+        Todo todo = todoList.get(index - 1);
         todo.markAsDone();
-        saveTodos();
+        saveTodo();
         System.out.println("Todo marked as Done!");
     }
 
@@ -163,16 +164,13 @@ public class TodoListManager {
         int index = scanner.nextInt();
         scanner.nextLine(); // Consume newline character
 
-        if (index < 1 || index > todos.size()) {
+        if (index < 1 || index > todoList.size()) {
             System.out.println("Invalid TODO number.");
             return;
         }
-
-        todos.remove(index - 1);
-        saveTodos();
+        todoList.remove(index - 1);
+        saveTodo();
         System.out.println("Todo deleted!");
     }
-
-
 }
 
