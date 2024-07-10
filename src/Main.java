@@ -8,7 +8,7 @@ public class Main {
     private List<Todo> todoList
             ;
     private Scanner scanner;
-    private String fileName = "todoList" ;
+    private String fileName = "todoList.txt" ;
     public static void main(String[] args) {
         Main todoListManager = new Main();
         todoListManager.showMenu();
