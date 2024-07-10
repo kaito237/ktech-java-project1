@@ -37,7 +37,6 @@ public class Todo {
 
     @Override
     public String toString() {
-//        String status = (done) ? " (Done)" : "";
         return title + " - " + until ;
     }
 }
