@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private List<Todo> todoList
-            ;
+    private List<Todo> todoList ;
     private Scanner scanner;
     private String fileName = "todoList.txt" ;
     public static void main(String[] args) {
@@ -25,15 +24,16 @@ public class Main {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                String title = data[0];
-                LocalDate until = LocalDate.parse(data[1]);
-                boolean done = Boolean.parseBoolean(data[2]);
+                String title = data[0];  // lay phan tu dau tien la tieu de
+                LocalDate until = LocalDate.parse(data[1]); // lay pjhan tu thu 2 làm ngay
+                boolean done = Boolean.parseBoolean(data[2]); // lay phan tu thu 3 lam trang thai
                 todoList.add(new Todo(title, until));
             }
         } catch (IOException | ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
             // xu li ngoai le
         }
     }
+
 
     private void saveTodo() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
